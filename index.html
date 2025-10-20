@@ -205,10 +205,6 @@
 
         /* Botão do Banner */
         .hero-content .btn {
-            color: var(--btn-color);
-            border-color: var(--btn-color);
-        }
-        .hero-content .btn:hover {
             background-color: var(--btn-color);
             color: var(--background-color);
         }
@@ -225,6 +221,9 @@
 
         .btn-lastfm { color: var(--color-lastfm); border-color: var(--color-lastfm); --btn-color: var(--color-lastfm); }
         .btn-lastfm:hover { background-color: var(--color-lastfm); color: white; }
+
+        .btn-twitter { color: #179cf0; border-color: #179cf0; --btn-color: #179cf0; }
+        .btn-twitter:hover { background-color: #179cf0; color: white; }
 
         /* --- Discografia --- */
         .discography-grid {
@@ -314,6 +313,17 @@
             overflow: hidden;
             margin-top: 60px;
         }
+        .twitter-section {
+            padding: 0;
+            position: relative;
+            background-color: #179cf0;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Parallax effect */
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin-top: 60px;
+        }
         .promo-banner {
             position: relative;
             z-index: 2;
@@ -348,13 +358,24 @@
             border-color: var(--color-lastfm);
             padding: 14px 32px;
             font-size: 1rem;
-            box-shadow: 0 4px 15px rgba(213, 16, 7, 0.4);
         }
         .promo-banner .btn-lastfm:hover {
             background-color: #ff3c33;
             border-color: #ff3c33;
             transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 25px rgba(213, 16, 7, 0.5);
+        }
+
+        .promo-banner .btn-twitter {
+            background: #179cf0;
+            color: white;
+            border-color: #179cf0;
+            padding: 14px 32px;
+            font-size: 1rem;
+        }
+        .promo-banner .btn-twitter:hover {
+            background-color: #179cf0;
+            border-color: #179cf0;
+            transform: translateY(-3px) scale(1.05);
         }
 
         /* --- Rodapé --- */
@@ -390,14 +411,14 @@
     <!-- ======================================================= -->
     <header class="hero-banner">
         
-        <!-- BANNER 1 -->
+        <!-- BANNER -->
         <div class="banner-item"
              data-countdown-active="true" 
              data-launch-date="2025-10-22T11:11:00-03:00"
              data-bg-image="https://pbs.twimg.com/profile_banners/1791931798835855361/1760970724/1500x500"
              data-button-color="var(--color-reflection)"
              data-button-link="https://music.youtube.com/playlist?list=PLJBOdbMsYNrAtMsDCopZDCeyeGRbDx18E&si=zUpjYbTaMKApKCGE"
-             data-button-text="Ouvir no YouTube Music">
+             data-button-text="Ouvir single The Moment no YT Music">
             <div class="hero-content fade-in">
                 <h1>Novo álbum Reflection disponível em</h1>
                 <div class="countdown"></div>
@@ -405,7 +426,22 @@
             </div>
         </div>
 
-        <!-- BANNER 2 -->
+        <!-- BANNER -->
+        <div class="banner-item"
+             data-countdown-active="true" 
+             data-launch-date="2025-10-22T11:11:05-03:00"
+             data-bg-image="https://pbs.twimg.com/profile_banners/1791931798835855361/1760970724/1500x500"
+             data-button-color="var(--color-reflection)"
+             data-button-link="https://music.youtube.com/playlist?list=PLJBOdbMsYNrAtMsDCopZDCeyeGRbDx18E&si=zUpjYbTaMKApKCGE"
+             data-button-text="Ouvir no YouTube Music">
+            <div class="hero-content fade-in">
+                <h1>Novo álbum Reflection disponível em</h1>
+                <h1 class="bigtext">JÁ DISPONÍVEL!</h1>
+                <a href="#" class="btn"></a>
+            </div>
+        </div>
+
+        <!-- BANNER -->
         <div class="banner-item"
              data-countdown-active="true" 
              data-bg-image="https://pbs.twimg.com/profile_banners/1791931798835855361/1760970724/1500x500"
@@ -430,7 +466,7 @@
             
             <h3 class="fade-in">2025</h3>
             <div class="discography-grid">
-                <div class="album-card fade-in" style="--album-color: var(--color-reflection);">
+                <!-- <div class="album-card fade-in" style="--album-color: var(--color-reflection);">
                     <img src="https://pbs.twimg.com/media/G3VPCRYWAAADfIj?format=jpg&name=medium" alt="Capa do álbum Reflection">
                     <div class="album-info">
                         <p class="album-title">Reflection</p>
@@ -439,7 +475,7 @@
                             <a href="https://music.youtube.com/playlist?list=PLJBOdbMsYNrD7AU5OrFNYkCSbvAbByMi-&si=jzf2BeebG0QdHCS4" class="album-btn btn-yt">YT Music</a>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="album-card fade-in" style="--album-color: var(--color-aliens);">
                     <img src="https://pbs.twimg.com/media/G1pATKqX0AA7iA0?format=jpg&name=medium" alt="Capa do álbum ALIENS">
                     <div class="album-info">
@@ -543,6 +579,15 @@
             </div>
         </section>
         
+        <!-- BANNER twitter -->
+        <section class="twitter-section fade-in">
+            <div class="promo-banner">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Logo_of_Twitter.svg/512px-Logo_of_Twitter.svg.png" alt="Logo Twitter" class="logo-lastfm">
+                <h2>Saiba notícias em tempo real do Trem Songs</h2>
+                <a href="https://x.com/@tremsongs" class="btn btn-twitter" target="_blank" rel="noopener noreferrer">Veja nosso perfil no Twitter</a>
+            </div>
+        </section>
+
         <!-- BANNER LAST.FM -->
         <section class="lastfm-section fade-in">
             <div class="promo-banner">
