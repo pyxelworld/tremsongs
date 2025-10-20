@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trem Songs - Músicas com IA</title>
+    <style>
+        /* --- Configurações Gerais e Fontes --- */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+        :root {
+            /* Paleta de Cores Principal */
+            --background-color: #f8f9fa;
+            --text-color-dark: #212529; /* Para fundos claros */
+            --text-color-light: #ffffff; /* Para fundos escuros */
+            --primary-text: #1a1a1a;
+            --secondary-text: #6c757d;
+            --border-radius: 16px;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+            --transition-speed: 0.3s ease;
+
+            /* Cores dos Álbuns (fácil de adicionar novas) */
+            --color-reflection: #56a2f6;
+            --color-aliens: #28a745;
+            --color-monsters: #212529;
+            --color-dream: #ffc107;
+            --color-fire: #fd7e14;
+            --color-love: #adb5bd;
+            
+            /* Cores dos Botões de Plataforma */
+            --color-yt: #FF0000;
+            --color-itunes: #FA5714;
+            --color-spotify: #1DB954;
+            --color-lastfm: #d51007;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color-dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Efeito de "Aurora" no fundo */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50vh;
+            background: radial-gradient(circle at 50% 0%, rgba(86, 162, 246, 0.1), transparent 70%);
+            animation: magical-glow 15s infinite alternate ease-in-out;
+            z-index: -1;
+        }
+
+        @keyframes magical-glow {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.5); opacity: 1; }
+        }
+
+        /* --- Estrutura e Layout --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+            color: var(--primary-text);
+        }
+
+        h1 { font-size: 2.5rem; letter-spacing: -1px; }
+        h2 { font-size: 2rem; margin-bottom: 2rem; position: relative; display: inline-block; }
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 4px;
+            background: var(--color-reflection); /* Usa a cor de destaque principal */
+            border-radius: 2px;
+        }
+        h3 { font-size: 1.2rem; color: var(--secondary-text); margin: 2.5rem 0 1rem 0; font-weight: 600;}
+
+        section {
+            padding: 80px 0;
+        }
+
+        /* --- Animações --- */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s var(--transition-speed), transform 0.6s var(--transition-speed);
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* --- Sistema de Banners Principais (Hero) --- */
+        .hero-banner {
+            position: relative; /* Container para os banners */
+        }
+        
+        .banner-item {
+            text-align: center;
+            padding: 120px 20px;
+            min-height: 50vh;
+            display: none; /* Escondido por padrão, JS controla a visibilidade */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            transition: all 0.5s ease-in-out;
+            --banner-text-color: var(--text-color-dark); /* Cor padrão do texto (para fundo claro) */
+            --banner-subtext-color: var(--secondary-text);
+            --shadow-strength: rgba(0,0,0,0.15); /* Sombra para texto em fundo claro */
+        }
+
+        .banner-item.active {
+            display: flex; /* Mostra o banner ativo */
+        }
+        
+        /* Overlay para escurecer a imagem e melhorar a legibilidade */
+        .banner-item.has-bg-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5); /* Ajuste a opacidade (0.5) se precisar */
+            z-index: 1;
+        }
+        
+        /* Garante que o conteúdo fique na frente do overlay */
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+        }
+
+        .hero-content h1 {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: var(--banner-subtext-color); /* Cor de texto dinâmica */
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 0 1px 3px var(--shadow-strength);
+        }
+        
+        .hero-content .countdown {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: var(--banner-text-color); /* Cor de texto dinâmica */
+            line-height: 1.2;
+            text-shadow: 0 2px 5px var(--shadow-strength);
+        }
+
+        .hero-content .bigtext {
+            font-size: clamp(1.25rem, 4vw, 2.25rem);
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: var(--banner-text-color); /* Cor de texto dinâmica */
+            line-height: 1.2;
+            text-shadow: 0 2px 5px var(--shadow-strength);
+        }
+
+        /* --- Botões --- */
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all var(--transition-speed);
+            border: 2px solid;
+            background-color: transparent;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            color: white;
+            box-shadow: 0 10px 20px -10px var(--btn-color, #000);
+        }
+
+        /* Botão do Banner */
+        .hero-content .btn {
+            color: var(--btn-color);
+            border-color: var(--btn-color);
+        }
+        .hero-content .btn:hover {
+            background-color: var(--btn-color);
+            color: var(--background-color);
+        }
+        
+        /* Botões de Plataforma */
+        .btn-yt { color: var(--color-yt); border-color: var(--color-yt); --btn-color: var(--color-yt); }
+        .btn-yt:hover { background-color: var(--color-yt); }
+        
+        .btn-itunes { color: var(--color-itunes); border-color: var(--color-itunes); --btn-color: var(--color-itunes); }
+        .btn-itunes:hover { background-color: var(--color-itunes); }
+        
+        .btn-spotify { color: var(--color-spotify); border-color: var(--color-spotify); --btn-color: var(--color-spotify); }
+        .btn-spotify:hover { background-color: var(--color-spotify); }
+
+        .btn-lastfm { color: var(--color-lastfm); border-color: var(--color-lastfm); --btn-color: var(--color-lastfm); }
+        .btn-lastfm:hover { background-color: var(--color-lastfm); color: white; }
+
+        /* --- Discografia --- */
+        .discography-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 35px;
+            align-items: stretch; /* Alinha os itens para preencher o espaço */
+        }
+        .album-card {
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+            text-align: left;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .album-card img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            display: block;
+        }
+        .album-info {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .album-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--primary-text);
+        }
+        .album-year {
+            font-size: 0.9rem;
+            color: var(--secondary-text);
+            margin-bottom: 15px;
+        }
+        .album-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: auto;
+        }
+        .album-btn {
+            display: block;
+            padding: 8px 10px;
+            text-align: center;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+            border: 1px solid;
+            background-color: transparent;
+            /* Pega a cor do card pai (--album-color) */
+            border-color: var(--album-color, var(--secondary-text));
+            color: var(--album-color, var(--secondary-text));
+        }
+
+        .album-btn:hover {
+            color: white;
+            background-color: var(--album-color, var(--secondary-text));
+        }
+
+        .not-listenable .album-title { color: #999; }
+        .not-listenable .album-year { color: #aaa; }
+        
+        .extra-info {
+            font-size: 0.8rem;
+            color: var(--secondary-text);
+            margin-top: 15px;
+        }
+        
+        /* --- Banners Secundários (NOVO ESTILO LAST.FM) --- */
+        .lastfm-section {
+            padding: 0;
+            position: relative;
+            background-color: #d1170e;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Parallax effect */
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin-top: 60px;
+        }
+        .promo-banner {
+            position: relative;
+            z-index: 2;
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: #fff;
+            padding: 60px 40px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .promo-banner .logo-lastfm { max-width: 180px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)); }
+        .promo-banner h2 {
+            font-size: clamp(1.8rem, 4vw, 2.2rem);
+            font-weight: 700;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            border: none;
+            line-height: 1.3;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        .promo-banner p { max-width: 550px; font-size: 1.1rem; color: #e0e0e0; margin: 0; }
+        .promo-banner .btn-lastfm {
+            background: var(--color-lastfm);
+            color: white;
+            border-color: var(--color-lastfm);
+            padding: 14px 32px;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(213, 16, 7, 0.4);
+        }
+        .promo-banner .btn-lastfm:hover {
+            background-color: #ff3c33;
+            border-color: #ff3c33;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(213, 16, 7, 0.5);
+        }
+
+        /* --- Rodapé --- */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: #e9ecef;
+            color: var(--secondary-text);
+            font-size: 0.9rem;
+            margin-top: 60px;
+        }
+        
+        /* --- Responsividade --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.8rem; }
+            .banner-item { padding: 80px 20px; }
+            .discography-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+            .promo-banner { padding: 50px 25px; }
+        }
+        
+        @media (max-width: 520px) {
+            .discography-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
+            .album-info { padding: 15px; }
+            .album-title { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ======================================================= -->
+    <!-- ÁREA DE BANNERS - FÁCIL DE EDITAR E ADICIONAR NOVOS     -->
+    <!-- ======================================================= -->
+    <header class="hero-banner">
+        
+        <!-- BANNER 1 -->
+        <div class="banner-item"
+             data-countdown-active="true" 
+             data-launch-date="2025-10-22T11:11:00-03:00"
+             data-bg-image="https://pbs.twimg.com/profile_banners/1791931798835855361/1760970724/1500x500"
+             data-button-color="var(--color-reflection)"
+             data-button-link="https://music.youtube.com/playlist?list=PLJBOdbMsYNrAtMsDCopZDCeyeGRbDx18E&si=zUpjYbTaMKApKCGE"
+             data-button-text="Ouvir no YouTube Music">
+            <div class="hero-content fade-in">
+                <h1>Novo álbum Reflection disponível em</h1>
+                <div class="countdown"></div>
+                <a href="#" class="btn"></a>
+            </div>
+        </div>
+
+        <!-- BANNER 2 -->
+        <div class="banner-item"
+             data-countdown-active="true" 
+             data-bg-image="https://pbs.twimg.com/profile_banners/1791931798835855361/1760970724/1500x500"
+             data-button-color="var(--color-reflection)"
+             data-button-link="https://music.youtube.com/playlist?list=PLJBOdbMsYNrAtMsDCopZDCeyeGRbDx18E&si=zUpjYbTaMKApKCGE"
+             data-button-text="Ouvir no YouTube Music">
+            <div class="hero-content fade-in">
+                <h1 class="bigtext">Escute nosso novo álbum Reflection</h1>
+                <h1>O Reflection inclúi músicas e vocais de fundo feitos pela nossa equipe</h1>
+                <a href="#" class="btn"></a>
+            </div>
+        </div>
+
+    </header>
+
+
+    <main class="container">
+
+        <!-- SEÇÃO DE ÁLBUNS -->
+        <section id="albums">
+            <h2 class="fade-in">Álbuns</h2>
+            
+            <h3 class="fade-in">2025</h3>
+            <div class="discography-grid">
+                <div class="album-card fade-in" style="--album-color: var(--color-reflection);">
+                    <img src="https://pbs.twimg.com/media/G3VPCRYWAAADfIj?format=jpg&name=medium" alt="Capa do álbum Reflection">
+                    <div class="album-info">
+                        <p class="album-title">Reflection</p>
+                        <p class="album-year">2025</p>
+                        <div class="album-buttons">
+                            <a href="https://music.youtube.com/playlist?list=PLJBOdbMsYNrD7AU5OrFNYkCSbvAbByMi-&si=jzf2BeebG0QdHCS4" class="album-btn btn-yt">YT Music</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="album-card fade-in" style="--album-color: var(--color-aliens);">
+                    <img src="https://pbs.twimg.com/media/G1pATKqX0AA7iA0?format=jpg&name=medium" alt="Capa do álbum ALIENS">
+                    <div class="album-info">
+                        <p class="album-title">ALIENS</p>
+                        <p class="album-year">2025</p>
+                        <div class="album-buttons">
+                            <a href="https://music.youtube.com/playlist?list=PLJBOdbMsYNrD7AU5OrFNYkCSbvAbByMi-&si=jzf2BeebG0QdHCS4" class="album-btn btn-yt">YT Music</a>
+                            <a href="https://is.gd/AAdtoi" class="album-btn btn-itunes">mp3 para iTunes</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="album-card fade-in" style="--album-color: var(--color-monsters);">
+                    <img src="https://pbs.twimg.com/media/GutRe6JWsAAT6TP?format=jpg&name=medium" alt="Capa do álbum MONSTERS INSIDE YOU">
+                    <div class="album-info">
+                        <p class="album-title">MONSTERS INSIDE YOU</p>
+                        <p class="album-year">2025</p>
+                        <div class="album-buttons">
+                            <a href="https://music.youtube.com/playlist?list=PLJBOdbMsYNrAGqCdBox2dFn4cG_oTv6kc&si=k4j7QuA1UI7bjN6h" class="album-btn btn-yt">YT Music</a>
+                            <a href="https://is.gd/nUaoJs" class="album-btn btn-itunes">mp3 para iTunes</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="fade-in">2024</h3>
+            <div class="discography-grid">
+                <div class="album-card fade-in" style="--album-color: var(--color-dream);">
+                    <img src="https://pbs.twimg.com/media/GR7DlIwbsAErZ9_?format=jpg&name=medium" alt="Capa do álbum Dream Big">
+                    <div class="album-info">
+                        <p class="album-title">Dream Big</p>
+                        <p class="album-year">2024</p>
+                        <div class="album-buttons">
+                            <a href="https://open.spotify.com/track/4prhAg4Y5OJwYljw2aMBmm?si=872f2696768f4b3e" class="album-btn btn-spotify">Spotify</a>
+                            <a href="https://music.youtube.com/playlist?list=PLJBOdbMsYNrBVCJM6b_g_Pwcd7Qw0C-6p&si=ja8TT6bAHgoMp4FD" class="album-btn btn-yt">YT Music</a>
+                            <a href="https://is.gd/7e6qrr" class="album-btn btn-itunes">mp3 para iTunes</a>
+                        </div>
+                        <p class="extra-info">Pode estar em mais plataformas. Pesquise por "dream big trem songs".</p>
+                    </div>
+                </div>
+                <div class="album-card fade-in" style="--album-color: var(--color-fire);">
+                    <img src="https://pbs.twimg.com/media/GP6Gg3JWUAAKBdP?format=jpg&name=medium" alt="Capa do álbum RUN THROUGH FIRE">
+                    <div class="album-info">
+                        <p class="album-title">RUN THROUGH FIRE</p>
+                        <p class="album-year">2024</p>
+                         <div class="album-buttons">
+                            <a href="https://music.youtube.com/playlist?list=PLJBOdbMsYNrD3-LlOdyLdEjZAnJV0tp3_&si=BGNdLInlB_jb6get" class="album-btn btn-yt">YT Music</a>
+                            <a href="https://is.gd/yGJWZ7" class="album-btn btn-itunes">mp3 para iTunes</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="album-card not-listenable fade-in" style="--album-color: var(--color-love);">
+                    <img src="https://pbs.twimg.com/media/GN-GoBGXsAE7LcD?format=jpg&name=medium" alt="Capa do álbum LOVE'S LAST BREATH">
+                    <div class="album-info">
+                        <p class="album-title">LOVE'S LAST BREATH</p>
+                        <p class="album-year">(Não disponível)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO DE SINGLES -->
+        <section id="singles">
+            <h2 class="fade-in">Singles</h2>
+
+            <h3 class="fade-in">2025</h3>
+            <div class="discography-grid">
+                <div class="album-card fade-in">
+                    <img src="https://is.gd/cFPrPw" alt="Capa do single Brandão">
+                    <div class="album-info">
+                        <p class="album-title">Brandão</p>
+                        <p class="album-year">2025</p>
+                         <div class="album-buttons">
+                            <a href="https://music.youtube.com/playlist?list=PLJBOdbMsYNrDv1AQ0SVUf_XEWh38dXPVY&si=occJXILcIHKkjRY3" class="album-btn btn-yt">YT Music</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="album-card fade-in">
+                    <img src="https://pbs.twimg.com/media/GnXNkNLXIAIIE94?format=jpg&name=large" alt="Capa do single Kal-El">
+                    <div class="album-info">
+                        <p class="album-title">Kal-El</p>
+                        <p class="album-year">2025</p>
+                         <div class="album-buttons">
+                            <a href="https://music.youtube.com/playlist?list=PLJBOdbMsYNrBx_USiV3xfm_lrdg34DBeK&si=yheK3Bx_b9bEIApI" class="album-btn btn-yt">YT Music</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 class="fade-in">2024</h3>
+            <div class="discography-grid">
+                 <div class="album-card fade-in">
+                    <img src="https://is.gd/aQGu4o" alt="Capa do single Molhinho Diarréia">
+                    <div class="album-info">
+                        <p class="album-title">Molhinho Diarréia</p>
+                        <p class="album-year">2024</p>
+                         <div class="album-buttons">
+                            <a href="https://music.youtube.com/playlist?list=PLJBOdbMsYNrAhYBIuTzsbdqHa96KniECp&si=nE7sRyhQ5iX8y8h5" class="album-btn btn-yt">YT Music</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- BANNER LAST.FM -->
+        <section class="lastfm-section fade-in">
+            <div class="promo-banner">
+                <img src="https://www.last.fm/static/images/footer_logo@2x.49ca51948b0a.png" alt="Logo Last.fm" class="logo-lastfm">
+                <h2>Acompanhe o que você ouve no last.fm</h2>
+                <a href="https://www.last.fm/music/Trem+Songs" class="btn btn-lastfm" target="_blank" rel="noopener noreferrer">Veja nosso perfil na Last.fm</a>
+            </div>
+        </section>
+        
+    </main>
+    
+    <footer class="footer">
+        <p>&copy; 2025 Trem Songs. Em parceria com a <a href="https://pyxelworld.com/">PyxelWorld.com</a></p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- NOVO SISTEMA DE GERENCIAMENTO DE BANNERS ---
+            const banners = document.querySelectorAll('.banner-item');
+            let currentBannerIndex = -1;
+            let countdownInterval;
+
+            // Função para calcular o brilho médio de uma imagem (para contraste do texto)
+            function getAverageBrightness(imageEl, callback) {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d', { willReadFrequently: true });
+                const img = new Image();
+                img.crossOrigin = "Anonymous";
+                img.src = imageEl.src;
+                img.onload = () => {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const data = imageData.data;
+                    let r, g, b, avg;
+                    let colorSum = 0;
+
+                    for(let x = 0, len = data.length; x < len; x += 4) {
+                        r = data[x];
+                        g = data[x+1];
+                        b = data[x+2];
+                        avg = Math.floor((r + g + b) / 3);
+                        colorSum += avg;
+                    }
+                    const brightness = Math.floor(colorSum / (img.width * img.height));
+                    callback(brightness);
+                };
+                 img.onerror = () => callback(128); // Retorna um valor neutro em caso de erro
+            }
+
+            function setBannerTextColor(banner, brightness) {
+                 if (brightness > 128) { // Fundo claro
+                    banner.style.setProperty('--banner-text-color', 'var(--text-color-dark)');
+                    banner.style.setProperty('--banner-subtext-color', 'var(--secondary-text)');
+                    banner.style.setProperty('--shadow-strength', 'rgba(0,0,0,0.15)');
+                } else { // Fundo escuro
+                    banner.style.setProperty('--banner-text-color', 'var(--text-color-light)');
+                    banner.style.setProperty('--banner-subtext-color', 'rgba(255,255,255,0.8)');
+                    banner.style.setProperty('--shadow-strength', 'rgba(0,0,0,0.5)');
+                }
+            }
+
+
+            function setupBanner(banner) {
+                const bgImage = banner.dataset.bgImage;
+                const buttonColor = banner.dataset.buttonColor;
+                const buttonLink = banner.dataset.buttonLink;
+                const buttonText = banner.dataset.buttonText;
+                const heroBtn = banner.querySelector('.btn');
+                
+                // Configurar botão
+                heroBtn.href = buttonLink;
+                heroBtn.textContent = buttonText;
+                heroBtn.style.setProperty('--btn-color', buttonColor);
+                
+                // Configurar background
+                if (bgImage) {
+                    banner.style.backgroundImage = `url('${bgImage}')`;
+                    banner.classList.add('has-bg-image');
+                    // Cria uma imagem temporária para análise de cor sem mostrá-la
+                    const tempImg = new Image();
+                    tempImg.src = bgImage;
+                    getAverageBrightness(tempImg, (brightness) => {
+                         setBannerTextColor(banner, brightness);
+                    });
+                } else {
+                    banner.classList.remove('has-bg-image');
+                    // Para fundos sólidos, assumimos que é o padrão claro
+                     setBannerTextColor(banner, 200);
+                }
+            }
+
+
+            function activateBanner(index) {
+                if (countdownInterval) clearInterval(countdownInterval);
+                if (index >= banners.length) return; // Não há mais banners
+
+                if (currentBannerIndex !== -1) {
+                    banners[currentBannerIndex].classList.remove('active');
+                }
+                
+                currentBannerIndex = index;
+                const activeBanner = banners[currentBannerIndex];
+                setupBanner(activeBanner);
+                activeBanner.classList.add('active');
+
+                const isCountdownActive = activeBanner.dataset.countdownActive === 'true';
+                const launchDateStr = activeBanner.dataset.launchDate;
+                const countdownEl = activeBanner.querySelector('.countdown');
+
+                if (isCountdownActive && launchDateStr && countdownEl) {
+                    const launchDate = new Date(launchDateStr).getTime();
+                    
+                    const updateCountdown = () => {
+                        const now = new Date().getTime();
+                        const distance = launchDate - now;
+
+                        if (distance < 0) {
+                            countdownEl.innerHTML = "JÁ DISPONÍVEL!";
+                            clearInterval(countdownInterval);
+                            // Após um breve momento, passa para o próximo banner
+                            activateBanner(currentBannerIndex + 1);
+                            return;
+                        }
+
+                        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                        countdownEl.innerHTML = 
+                            `${days}d ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
+                    };
+                    
+                    countdownInterval = setInterval(updateCountdown, 1000);
+                    updateCountdown();
+                } else if (countdownEl) {
+                    countdownEl.style.display = 'none';
+                }
+            }
+
+            // Inicia o sistema de banners
+            activateBanner(0);
+
+
+            // --- SCRIPT DE ANIMAÇÃO AO ROLAR (FADE-IN) ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            const elementsToAnimate = document.querySelectorAll('.fade-in');
+            elementsToAnimate.forEach(el => observer.observe(el));
+        });
+    </script>
+
+</body>
+</html>
