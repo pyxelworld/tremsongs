@@ -541,7 +541,7 @@
 
         <!-- SEÇÃO DE SINGLES -->
         <section id="singles">
-            <h2 class="fade-in">Singles Originais</h2>
+            <h2 class="fade-in">Outras Músicas</h2>
 
             <h3 class="fade-in">2025</h3>
             <div class="discography-grid">
@@ -610,7 +610,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // --- NOVO SISTEMA DE GERENCIAMENTO DE BANNERS ---
             const banners = document.querySelectorAll('.banner-item');
-            let currentBannerIndex = -1;
+            let currentBannerIndex = 0; // Start at the first banner
             let countdownInterval;
 
             // Função para calcular o brilho médio de uma imagem (para contraste do texto)
@@ -639,11 +639,11 @@
                     const brightness = Math.floor(colorSum / (img.width * img.height));
                     callback(brightness);
                 };
-                 img.onerror = () => callback(128); // Retorna um valor neutro em caso de erro
+                img.onerror = () => callback(128); // Retorna um valor neutro em caso de erro
             }
 
             function setBannerTextColor(banner, brightness) {
-                 if (brightness > 128) { // Fundo claro
+                if (brightness > 128) { // Fundo claro
                     banner.style.setProperty('--banner-text-color', 'var(--text-color-dark)');
                     banner.style.setProperty('--banner-subtext-color', 'var(--secondary-text)');
                     banner.style.setProperty('--shadow-strength', 'rgba(0,0,0,0.15)');
@@ -654,7 +654,6 @@
                 }
             }
 
-
             function setupBanner(banner) {
                 const bgImage = banner.dataset.bgImage;
                 const buttonColor = banner.dataset.buttonColor;
@@ -663,35 +662,36 @@
                 const heroBtn = banner.querySelector('.btn');
                 
                 // Configurar botão
-                heroBtn.href = buttonLink;
-                heroBtn.textContent = buttonText;
-                heroBtn.style.setProperty('--btn-color', buttonColor);
+                if(heroBtn) {
+                    heroBtn.href = buttonLink;
+                    heroBtn.textContent = buttonText;
+                    heroBtn.style.setProperty('--btn-color', buttonColor);
+                }
                 
                 // Configurar background
                 if (bgImage) {
                     banner.style.backgroundImage = `url('${bgImage}')`;
                     banner.classList.add('has-bg-image');
-                    // Cria uma imagem temporária para análise de cor sem mostrá-la
                     const tempImg = new Image();
                     tempImg.src = bgImage;
                     getAverageBrightness(tempImg, (brightness) => {
-                         setBannerTextColor(banner, brightness);
+                        setBannerTextColor(banner, brightness);
                     });
                 } else {
                     banner.classList.remove('has-bg-image');
-                    // Para fundos sólidos, assumimos que é o padrão claro
-                     setBannerTextColor(banner, 200);
+                    setBannerTextColor(banner, 200);
                 }
             }
 
-
             function activateBanner(index) {
                 if (countdownInterval) clearInterval(countdownInterval);
-                if (index >= banners.length) return; // Não há mais banners
-
-                if (currentBannerIndex !== -1) {
-                    banners[currentBannerIndex].classList.remove('active');
+                if (index >= banners.length) {
+                    console.log("No more active banners to display.");
+                    return; 
                 }
+
+                // Deactivate all banners first
+                banners.forEach(b => b.classList.remove('active'));
                 
                 currentBannerIndex = index;
                 const activeBanner = banners[currentBannerIndex];
@@ -700,9 +700,8 @@
 
                 const isCountdownActive = activeBanner.dataset.countdownActive === 'true';
                 const launchDateStr = activeBanner.dataset.launchDate;
-                const countdownEl = activeBanner.querySelector('.countdown');
-
-                if (isCountdownActive && launchDateStr && countdownEl) {
+                
+                if (isCountdownActive && launchDateStr) {
                     const launchDate = new Date(launchDateStr).getTime();
                     
                     const updateCountdown = () => {
@@ -710,32 +709,33 @@
                         const distance = launchDate - now;
 
                         if (distance < 0) {
-                            countdownEl.innerHTML = "JÁ DISPONÍVEL!";
                             clearInterval(countdownInterval);
-                            // Após um breve momento, passa para o próximo banner
+                            // Time is over, try to activate the next banner
                             activateBanner(currentBannerIndex + 1);
                             return;
                         }
 
-                        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                        // Find the countdown element inside the *active* banner
+                        const countdownEl = activeBanner.querySelector('.countdown, .bigtext');
+                        // Only update the display if the countdown element exists
+                        if (countdownEl && countdownEl.classList.contains('countdown')) {
+                            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                        countdownEl.innerHTML = 
-                            `${days}d ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
+                            countdownEl.innerHTML = 
+                                `${days}d ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
+                        }
                     };
                     
                     countdownInterval = setInterval(updateCountdown, 1000);
-                    updateCountdown();
-                } else if (countdownEl) {
-                    countdownEl.style.display = 'none';
+                    updateCountdown(); // Run immediately
                 }
             }
 
             // Inicia o sistema de banners
             activateBanner(0);
-
 
             // --- SCRIPT DE ANIMAÇÃO AO ROLAR (FADE-IN) ---
             const observer = new IntersectionObserver((entries) => {
