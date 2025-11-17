@@ -412,50 +412,11 @@
     <!-- ======================================================= -->
     <header class="hero-banner">
 
-        <!-- FIRST FLOOR -->
-        <div class="banner-item"
-             data-countdown-active="true"
-             data-launch-date="2025-11-17T16:00:00-03:00"
-             data-bg-image="https://pbs.twimg.com/profile_banners/1791931798835855361/1763237166/1500x500"
-             data-button-color="var(--color-firstfloor)"
-             data-button-link="https://music.youtube.com/playlist?list=PLJBOdbMsYNrCx5mT901HLAYdNZWEdCyre&si=tG_SfTgK3MV-_ujT"
-             data-button-text="Ouvir no YouTube Music">
-            <div class="hero-content fade-in">
-                <h1 class="bigtext">Escute nosso novo álbum First Floor</h1>
-                <h1>Nosso melhor álbum de todos, com músicas rock e colaboração dos mesmos criadores dos nossos primeiros álbuns.</h1>
-                <a href="#" class="btn"></a>
-            </div>
-        </div>
-
-        <!-- SOON -->
-        <div class="banner-item"
-             data-countdown-active="true"
-             data-launch-date="2025-11-17T17:00:00-03:00"
-             data-bg-image="https://pbs.twimg.com/profile_banners/1791931798835855361/1763237166/1500x500"
-             data-button-color="var(--color-firstfloor)">
-            <div class="hero-content fade-in">
-                <h1>Nova deluxe do First Floor disponível em...</h1>
-                <h1 class="countdown"></h1>
-            </div>
-        </div>
-
-        <!-- SOON -->
-        <div class="banner-item"
-             data-countdown-active="true"
-             data-launch-date="2025-11-17T17:00:05-03:00"
-             data-bg-image="https://pbs.twimg.com/profile_banners/1791931798835855361/1763237166/1500x500"
-             data-button-color="var(--color-firstfloor)">
-            <div class="hero-content fade-in">
-                <h1>Nova deluxe do First Floor disponível em...</h1>
-                <h1 class="bigtext">AGORA!</h1>
-            </div>
-        </div>
-
         <!-- THIRD FLOOR -->
         <div class="banner-item"
              data-countdown-active="true"
              data-launch-date="2030-11-17T16:00:00-03:00"
-             data-bg-image="https://pbs.twimg.com/profile_banners/1791931798835855361/1763237166/1500x500"
+             data-bg-image="https://pbs.twimg.com/profile_banners/1791931798835855361/1763407321/1500x500"
              data-button-color="var(--color-firstfloor)"
              data-button-link="https://music.youtube.com/playlist?list=PLJBOdbMsYNrCx5mT901HLAYdNZWEdCyre&si=tG_SfTgK3MV-_ujT"
              data-button-text="Ouvir no YouTube Music">
@@ -478,13 +439,13 @@
             <h3 class="fade-in">2025</h3>
             <div class="discography-grid">
                 <div class="album-card fade-in" style="--album-color: var(--color-firstfloor);">
-                    <img src="https://pbs.twimg.com/profile_images/1989786960311799808/c2EVBKgT_400x400.jpg" alt="Capa do álbum First Floor">
+                    <img src="https://pbs.twimg.com/media/G5vEiWlXQAAPK7_?format=jpg&name=large" alt="Capa do álbum First Floor">
                     <div class="album-info">
                         <p class="album-title">First Floor</p>
                         <p class="album-year">2025 - Rock</p>
                         <div class="album-buttons">
                             <a href="https://music.youtube.com/playlist?list=PLJBOdbMsYNrCx5mT901HLAYdNZWEdCyre&si=tG_SfTgK3MV-_ujT" class="album-btn btn-yt">YT Music</a>
-                            <!-- <a href="https://drive.usercontent.google.com/download?id=1l86vZ06hZKq0MwSjvYcSx5vDnBy5805k&export=download" class="album-btn btn-itunes">mp3 para iTunes</a> -->
+                            <a href="https://drive.usercontent.google.com/download?id=1l86vZ06hZKq0MwSjvYcSx5vDnBy5805k&export=download" class="album-btn btn-itunes">mp3 para iTunes</a>
                         </div>
                     </div>
                 </div>
@@ -664,9 +625,9 @@
 
             function setBannerTextColor(banner, brightness) {
                 if (brightness > 128) { // Fundo claro
-                    banner.style.setProperty('--banner-text-color', 'var(--text-color-dark)');
-                    banner.style.setProperty('--banner-subtext-color', 'var(--secondary-text)');
-                    banner.style.setProperty('--shadow-strength', 'rgba(0,0,0,0.15)');
+                    banner.style.setProperty('--banner-text-color', 'var(--text-color-light)');
+                    banner.style.setProperty('--banner-subtext-color', 'rgba(255,255,255,0.8)');
+                    banner.style.setProperty('--shadow-strength', 'rgba(0,0,0,0.5)');
                 } else { // Fundo escuro
                     banner.style.setProperty('--banner-text-color', 'var(--text-color-light)');
                     banner.style.setProperty('--banner-subtext-color', 'rgba(255,255,255,0.8)');
